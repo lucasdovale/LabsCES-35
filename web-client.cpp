@@ -14,7 +14,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
-#include <bits/stdc++.h>
+
 #define SERVER_PORT 8080 /* arbitrary, but client & server must agree */
 #define BUFSIZE 4096     /* block transfer size */
 
@@ -92,8 +92,6 @@ int main(int argc, char **argv) {
   /************** INI GET **************/
   /* Connection is now established. Send file name including 0 byte at end. */
   string msg_HTTP = "GET " + objeto + " HTTP/1.1\r\nHost:" + hostname + "\r\n\r\n";
-
-  // printf("mensagem: %s\n", &msg_HTTP[0]);
 
   write(s, &msg_HTTP[0], msg_HTTP.size() + 1);
   /************** FIM GET **************/
