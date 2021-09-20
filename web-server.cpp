@@ -13,8 +13,6 @@
 #include <netinet/in.h>
 #include <netdb.h>
 
-#include "parseURL.cpp"
-
 #include <string> // para que reconheca o identificador string 
 #include <iostream>
 #include <ctime>
@@ -25,6 +23,19 @@
 #define QUEUE_SIZE 10
 
 using namespace std;
+
+int parsing_message(char* message, char *breaks[], char regEx[]) {
+    char *parte;
+    parte = strtok(message, regEx);
+    int i = 0;
+    while (parte != NULL)
+    {
+        breaks[i] = parte;
+        parte = strtok(NULL, regEx);
+        i++;
+    }
+    return i;
+}
 
 int main(int argc, char *argv[])
 { 
@@ -85,7 +96,7 @@ int main(int argc, char *argv[])
 
       cout << "\n" << buf;
 
-      int size = parsing_URL(buf, breaks, regEx);
+      int size = parsing_message(buf, breaks, regEx);
 
       string type = breaks[0];
       string objeto = breaks[1];
@@ -152,7 +163,7 @@ int main(int argc, char *argv[])
       dt = asctime(gmtm);
       
       char regEx_aux[] = " \n";
-      parsing_URL(dt, breaks, regEx_aux);
+      parsing_message(dt, breaks, regEx_aux);
 
       /* Consolidando o Header */
       // ajeitar comprimento

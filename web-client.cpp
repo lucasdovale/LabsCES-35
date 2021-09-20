@@ -3,9 +3,6 @@
 // Lab 2 - Soquetes
 // Written by Lucas do Vale Bezerra e Igor Amâncio Machado Dias, COMP-22
 
-#include "parseURL.cpp"
-#include "parseMessage.cpp"
-
 #include <sys/types.h>
 #include <unistd.h>
 #include <string.h>
@@ -15,10 +12,40 @@
 #include <netinet/in.h>
 #include <netdb.h>
 
+#include <string> // para que reconheca o identificador string 
+#include <iostream>
+#include <ctime>
+#include <fstream>
+
 #define SERVER_PORT 8080 /* arbitrary, but client & server must agree */
 #define BUFSIZE 4096     /* block transfer size */
 
 using namespace std;
+
+int parsing_message(char* message, char *breaks[], char regEx[]) {
+    char *parte;
+    parte = strtok(message, regEx);
+    int i = 0;
+    while (parte != NULL)
+    {
+        breaks[i] = parte;
+        parte = strtok(NULL, regEx);
+        i++;
+    }
+    return i;
+}
+
+
+int start_body(int size, char *breaks[]) {
+    int i;
+    for(i = 1; i < size; i++) {
+        if (strstr(breaks[i], "\r") == NULL)
+            return i;
+
+    }
+    return -1;
+}
+
 
 int main(int argc, char **argv) {
 
@@ -27,7 +54,7 @@ int main(int argc, char **argv) {
   char regEx[] = ":/";
   char *breaks[99];
 
-  int size = parsing_URL(URL, breaks, regEx);
+  int size = parsing_message(URL, breaks, regEx);
 
   string protocol = breaks[0];
   string hostname = breaks[1];
